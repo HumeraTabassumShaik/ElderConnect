@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health Log | ElderConnect</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<header class="navbar">
+  <h1>ElderConnect</h1>
+  <nav>
+    <a href="profile.html">👵 Profiles</a>
+    <button id="logoutBtn">🚪 Logout</button>
+  </nav>
+</header>
+
+<main class="form-wrapper">
+  <h2>📈 Health Log <span id="elderBadge"></span></h2>
+   <!-- <div id="elder-info" class="card" style=".card {
+  background: #fff;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+}
+">
+    <h2 id="elder-name"></h2>
+    <p id="elder-dob"></p>
+    <p id="elder-gender"></p>
+  </div> -->
+  <form id="healthForm" class="reminder-form">
+    <label for="date">📅 Date</label>
+    <input type="date" id="date" required>
+
+    <label for="bp">💓 Blood Pressure (mmHg)</label>
+    <input type="text" id="bp" placeholder="e.g., 120/80" required>
+
+    <label for="sugar">🍬 Sugar Level (mg/dL)</label>
+    <input type="number" id="sugar" placeholder="e.g., 110" required>
+
+    <label for="temp">🌡️ Body Temperature (°F)</label>
+    <input type="number" id="temp" step="0.1" placeholder="e.g., 98.6" required>
+
+    <label for="notes">📝 Notes (optional)</label>
+    <textarea id="notes" placeholder="e.g., Felt tired today..."></textarea>
+
+    <button type="submit">➕ Save Log</button>
+  </form>
+
+  <h3>📜 Log History (Last 30)</h3>
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>Date</th><th>BP</th><th>Sugar</th><th>Temp</th><th>Notes</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <button id="dlBtn">⬇️ Download Last 30 Days</button>
+
+  <h3>📊 Health Trends</h3>
+  <div class="charts-wrapper">
+    <div><h4>🩸 Blood Pressure</h4><canvas id="bpChart" height="100"></canvas></div>
+    <div><h4>🍬 Sugar</h4><canvas id="sugarChart" height="100"></canvas></div>
+    <div><h4>🌡️ Temperature</h4><canvas id="tempChart" height="100"></canvas></div>
+  </div>
+</main>
+
+<footer><p>❤️ ElderConnect – Health & Happiness</p></footer>
+
+<script>
+  const token = localStorage.getItem("adminToken");
+  if (!token) { alert("🚫 Please log in as admin"); window.location.href = "admin.html"; }
+
+  document.getElementById("logoutBtn").onclick = () => {
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin.html";
+  };
+
+  const params = new URLSearchParams(location.search);
+  const elderId = params.get("elderId");
+  const elderName = params.get("elderName");
+  if (!elderId) { alert("No elder selected"); location.href = "profile.html"; }
+  document.getElementById("elderBadge").textContent = elderName ? `– ${elderName}` : "";
+
+  // No future dates
+  document.getElementById("date").max = new Date().toISOString().split("T")[0];
+
+  const tableBody = document.querySelector("#logTable tbody");
+  let bpChart, sugarChart, tempChart;
+
+  async function fetchJSON(url, opts={}) {
+    const res = await fetch(url, {
+      ...opts,
+      headers: {
+        "Authorization": "Bearer " + token,
+        ...(opts.headers || {}),
+      }
+    });
+    return res.json();
+  }
+
+  // Submit handler with duplicate-day check
+  document.getElementById("healthForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const date = document.getElementById("date").value;
+    const bp = document.getElementById("bp").value.trim();
+    const sugar = parseInt(document.getElementById("sugar").value);
+    const temperature = parseFloat(document.getElementById("temp").value);
+    const notes = document.getElementById("notes").value;
+
+    if (!date) return alert("Pick a date");
+
+    // Check existing
+    const existing = await fetchJSON(`http://localhost:5000/api/healthlog/${elderId}?date=${date}`);
+    if (existing && existing._id) {
+      const ok = confirm("⚠️ You already entered a log for this date. Replace it?");
+      if (!ok) return;
+      await fetch(`http://localhost:5000/api/healthlog/${existing._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ elderId, date, bp, sugar, temperature, notes })
+      });
+    } else {
+      // Create
+      const res = await fetch("http://localhost:5000/api/healthlog", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ elderId, date, bp, sugar, temperature, notes })
+      });
+      if (res.status === 409) return alert("A log for that day already exists.");
+    }
+
+    e.target.reset();
+    renderTable();
+    renderCharts();
+  });
+
+  function renderTable() {
+    fetchJSON(`http://localhost:5000/api/healthlog/${elderId}`)
+      .then(logs => {
+        tableBody.innerHTML = "";
+        (logs || []).forEach(log => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${new Date(log.date).toLocaleDateString()}</td>
+            <td>${log.bp}</td>
+            <td>${log.sugar}</td>
+            <td>${log.temperature}</td>
+            <td>${log.notes || "-"}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      })
+      .catch(err => console.error("❌ table:", err));
+  }
+
+  function renderCharts() {
+    fetchJSON(`http://localhost:5000/api/healthlog/${elderId}`)
+      .then(data => {
+        const labels   = data.map(l => new Date(l.date).toLocaleDateString()).reverse();
+        const systolic = data.map(l => parseInt(String(l.bp).split("/")[0] || 0)).reverse();
+        const diastolic= data.map(l => parseInt(String(l.bp).split("/")[1] || 0)).reverse();
+        const sugar    = data.map(l => l.sugar).reverse();
+        const temp     = data.map(l => l.temperature).reverse();
+
+        if (bpChart) bpChart.destroy();
+        if (sugarChart) sugarChart.destroy();
+        if (tempChart) tempChart.destroy();
+
+        bpChart = new Chart(document.getElementById("bpChart"), {
+          type: "line",
+          data: { labels, datasets: [
+            { label: "Systolic", data: systolic, borderColor: "#ef476f", fill: false },
+            { label: "Diastolic", data: diastolic, borderColor: "#06d6a0", fill: false }
+          ]},
+          options: { responsive: true }
+        });
+
+        sugarChart = new Chart(document.getElementById("sugarChart"), {
+          type: "line",
+          data: { labels, datasets: [{ label: "Sugar (mg/dL)", data: sugar, borderColor: "#118ab2", fill: false }] },
+          options: { responsive: true }
+        });
+
+        tempChart = new Chart(document.getElementById("tempChart"), {
+          type: "line",
+          data: { labels, datasets: [{ label: "Temperature (°F)", data: temp, borderColor: "#ffd166", fill: false }] },
+          options: { responsive: true }
+        });
+      })
+      .catch(err => console.error("❌ charts:", err));
+  }
+
+  document.getElementById("dlBtn").addEventListener("click", async () => {
+    const logs = await fetchJSON(`http://localhost:5000/api/healthlog/${elderId}`);
+    const header = ["Date","BP","Sugar","Temp","Notes"];
+    let csv = header.join(",") + "\n";
+    (logs || []).forEach(log => {
+      const row = [
+        new Date(log.date).toLocaleDateString(),
+        log.bp,
+        log.sugar,
+        log.temperature,
+        (log.notes || "").replace(/"/g, '""')
+      ].map(v => `"${v}"`).join(",");
+      csv += row + "\n";
+    });
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `ElderConnect_HealthLogs_${elderName || elderId}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  });
+ 
+document.addEventListener("DOMContentLoaded", () => {
+  let name = localStorage.getItem("elderName");
+  let dob = localStorage.getItem("elderDob");
+  let gender = localStorage.getItem("elderGender");
+
+  document.getElementById("elder-name").textContent = "Elder: " + name;
+  document.getElementById("elder-dob").textContent = "DOB: " + dob;
+  document.getElementById("elder-gender").textContent = "Gender: " + gender;
+});
+
+
+  window.addEventListener("DOMContentLoaded", () => { renderTable(); renderCharts(); });
+</script>
+</body>
+</html>

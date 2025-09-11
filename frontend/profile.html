@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elder Profiles | ElderConnect</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header class="navbar">
+  <h1>ElderConnect</h1>
+  <nav>
+    <a href="profile.html" class="active">👵 Profiles</a>
+    <a href="index.html">🏠 Home</a>
+    <button id="logoutBtn">🚪 Logout</button>
+  </nav>
+</header>
+
+<main class="form-wrapper">
+  <h2>➕ Create Elder Profile</h2>
+
+  <form id="profileForm" class="reminder-form">
+    <label for="name">Elder's Name</label>
+    <input type="text" id="name" required>
+
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" required>
+
+    <label for="gender">Gender</label>
+    <select id="gender" required>
+      <option value="">Select</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+
+    <button type="submit">Save Profile</button>
+  </form>
+
+  <h3>👵 Elder Profiles</h3>
+  <div id="profilesContainer" class="profiles-grid"></div>
+</main>
+
+<footer><p>❤️ ElderConnect – Health & Happiness</p></footer>
+
+<script>
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    alert("🚫 Please log in as admin");
+    window.location.href = "admin.html";
+  }
+
+  document.getElementById("logoutBtn").onclick = () => {
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin.html";
+  };
+
+  // Max DOB can't be in the future
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("dob").setAttribute("max", today);
+
+  const container = document.getElementById("profilesContainer");
+  const form = document.getElementById("profileForm");
+
+  function loadProfiles() {
+    fetch("http://localhost:5000/api/elders", {
+      headers: { "Authorization": "Bearer " + token }
+    })
+    .then(r => r.json())
+    .then(elders => {
+      container.innerHTML = "";
+      elders.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "profile-card";
+        card.innerHTML = `
+          <h4>${p.name}</h4>
+          <p>🆔 ${p.elderCode || "-"}</p>
+          <p>🎂 ${p.dob}</p>
+          <p>🚻 ${p.gender}</p>
+          <button>📈 View Logs</button>
+        `;
+        card.querySelector("button").onclick = () => {
+          window.location.href = `healthlog.html?elderId=${p._id}&elderName=${encodeURIComponent(p.name)}`;
+        };
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error("❌ Fetch profiles:", err);
+      alert("Failed to load profiles");
+    });
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = {
+      name: document.getElementById("name").value.trim(),
+      dob: document.getElementById("dob").value,
+      gender: document.getElementById("gender").value
+    };
+    fetch("http://localhost:5000/api/elders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(resp => {
+      if (resp.elder) {
+        form.reset();
+        loadProfiles();
+      } else {
+        alert(resp.msg || "Could not create elder");
+      }
+    })
+    .catch(err => {
+      console.error("❌ Create elder:", err);
+      alert("Server error");
+    });
+  });
+
+  window.addEventListener("DOMContentLoaded", loadProfiles);
+</script>
+
+<style>
+  .profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 1rem; margin-top: 1rem;
+  }
+  .profile-card {
+    border: 1px solid #ddd; padding: 1rem; border-radius: 12px;
+    background: #f9f9f9; text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  }
+  .profile-card h4 { margin: .25rem 0 .5rem }
+  .profile-card button { margin-top: .5rem }
+</style>
+</body>
+</html>

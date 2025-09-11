@@ -1,0 +1,559 @@
+<!-- MODIFIED Nutrition Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nutrition & Diet | ElderConnect</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
+    .navbar { background-color: #0077b6; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .navbar a { color: white; margin: 0 1rem; text-decoration: none; }
+    .form-wrapper { max-width: 1200px;
+      margin: auto;
+       padding: 2rem; }
+    .section-block { background: #fff; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 8px #0077b6 }
+    .section-flex { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .card { background: #fefbd8; padding: 1rem; border-radius: 6px; border: 1px solid #ccc; }
+    .nutrition-box { background: #e8f5e9; padding: 1rem; border-left: 5px solid #0077b6; border-radius: 8px; font-size: 1.1rem; }
+    button { background: #0077b6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.75rem; border: 1px solid #ccc; text-align: left; vertical-align: top; }
+    th { background-color: #e0f2f1; }
+    .meal-tracker { margin-top: 1rem; background: #e3f2fd; padding: 1rem; border-radius: 8px; font-size: 0.95rem; }
+    .voice-btn { margin-top: 0.5rem; background-color: #1976d2; color: white; }
+    .recipe-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .card iframe {
+  border-radius: 6px;
+  max-width: 100%;
+}
+
+  </style>
+ 
+</head>
+<body>
+<header class="navbar">
+  <h1>ElderConnect</h1>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="reminders.html">💊 Medication</a>
+    <a href="appointments.html">📅 Appointments</a>
+    <a href="nutrition.html" class="active">🥗 Nutrition</a>
+    <a href="about.html">ℹ️ About</a>
+  </nav>
+</header>
+<main class="form-wrapper">
+  <h2>🥦 Elder Nutrition</h2>
+<!-- Full Width Hero Section -->
+<div style="
+  background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDEys62j5ZzjimVKt9_lJb4EEQemuR820buw&s') center center / cover no-repeat;
+  width: 100%;
+  height: 400px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  border-radius: 0;
+">
+  <div style="
+   
+    color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 80%;
+  ">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">🥗 Eat Well, Live Well</h2>
+    <p style="font-size: 1.2rem;">Tailor your nutrition to your age and health condition — because every bite matters.</p>
+  </div>
+</div>
+
+
+
+  <div class="section-block section-flex">
+    <div>
+      <h3>👵 Age</h3>
+      <select id="ageGroup">
+        <option value="">-- Select Age Group --</option>
+        <option value="50-59">50–59</option>
+        <option value="60-69">60–69</option>
+        <option value="70-79">70–79</option>
+        <option value="80+">80+</option>
+      </select>
+    </div>
+    <div>
+      <h3>🩺 Health Condition</h3>
+      <select id="healthCondition">
+  <option value="">-- Select --</option>
+  <option value="Diabetes">Diabetes</option>
+  <option value="BP">Blood Pressure</option>
+  <option value="Calcium">Low Calcium</option>
+  <option value="Heart">Heart Health</option>
+  <option value="Arthritis">Arthritis</option>
+  <option value="Digestion">Digestive Issues</option>
+  <option value="Immunity">Low Immunity</option>
+  <option value="Weight">Weight Management</option>
+</select>
+
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h3>📅 7-Day Meal Plan</h3>
+    <div id="mealPlanTable"></div>
+    
+    <div style="margin-top:1rem; font-size: 0.9rem;">
+      <strong>Superfoods:</strong> 🥛 Ragi, 🌿 Spinach, 🥥 Coconut, 🥜 Walnuts
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h3>💡 Daily Tip <button class="voice-btn" onclick="speakTip()">🔊 Listen</button></h3>
+    <div class="nutrition-box" id="nutritionTip"></div>
+  </div>
+
+  <div class="section-block">
+    <h3>🍛 Simple Recipes</h3>
+    <div class="recipe-cards">
+      
+      <div class="card">
+  <strong>Vegetable Khichdi</strong>
+  <p>A light, balanced one-pot dish packed with vegetables and lentils.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/imm061n3URY?si=E1OCGFMVdAnfwWDA" frameborder="0" allowfullscreen></iframe>
+</div>
+
+      <div class="card">
+  <strong>Ragi Malt</strong>
+  <p>Calcium-rich drink made from ragi flour, great for bone health.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/RmKC8h1rkCY?si=FaUkdUVIHhxvzu4I"  frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="card">
+  <strong>Moong Dal Soup</strong>
+  <p>Protein-packed soup, easy to digest and good for dinner.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/h1p8esKpQhI?si=EG4QQTrFyRLp2b-Q"  frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="card">
+  <strong>Soft Idli with Chutney</strong>
+  <p>Gentle on the stomach, these soft idlis are ideal for breakfast.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/LQPm20CSLSg?si=BKQZUWkxzgv3Cqki"  frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Vegetable Dalia (Broken Wheat Porridge)</strong>
+  <p>High in fiber, low in fat, and super easy to digest.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/T-w19b8ynn0?si=SsT_UeeYror8BAp8"   frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Curd Oats with Veggies</strong>
+  <p> Cooling, probiotic-rich, and gentle on the stomach — great for gut health.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/4b9HU0iphMM?si=L8lLtZ5L8WNVQb2p"  frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Beetroot Raita</strong>
+  <p>Cooling, iron-rich side dish made with curd and grated beetroot. Great for digestion and immunity.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/4VcuCQk6VHM?si=qjGlWg30HC6Q6Acr" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="card">
+  <strong>Lauki (Bottle Gourd) Soup</strong>
+  <p>Light and hydrating soup, easy on the stomach, and perfect for hot days or low appetite.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/XYIpKw4DbJE?si=6EXMbPoqN3HW83Tq" frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Herbal Kadha (Immunity Drink)</strong>
+  <p>A warm decoction made with tulsi, ginger, black pepper, and honey — a natural immunity booster.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/PddOOLMVvGE?si=eb-TyFRF4-8RKt6Y" frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Vegetable Stew with Coconut Milk</strong>
+  <p>Soft veggies cooked in mild coconut gravy — soothing, nutritious, and easy to digest.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/JUCldIjdCxc?si=NDDqw0uMB5cB52aY" frameborder="0" allowfullscreen></iframe>
+</div>
+<div class="card">
+  <strong>Soft Vegetable Thepla</strong>
+  <p>Gujarati-style flatbread made with spinach and mild spices — fiber-rich and good for travel or snacks.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/Gyx_8PdGN-0?si=YWh2W6q7_1h5-U0f" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="card">
+  <strong>Suji (Rava) Upma with Veggies</strong>
+  <p>Wholesome breakfast option — quick, soft, and customizable with carrots, peas, and beans.</p>
+  <iframe width="100%" height="180" src="https://www.youtube.com/embed/Fz20kYmUcuY?si=6OSSKC1U-S9P_9Xj" frameborder="0" allowfullscreen></iframe>
+</div>
+    </div>
+  </div>
+</main>
+<script>
+
+const tips = [
+  "Eat small meals more frequently.",
+  "Add turmeric and ginger to reduce inflammation.",
+  "Stay hydrated — drink every 2 hours.",
+  "Avoid processed sugar, use dates or fruits.",
+  "Include at least 3 colors of veggies daily.",
+  "Warm soups help improve appetite.",
+  "Fermented foods support digestion.",
+  "Snack on nuts for healthy fats.",
+  "Start day with a glass of lukewarm water.",
+  "Limit salt to control blood pressure.",
+  "Choose whole grains over white rice or maida.",
+  "Boiled or steamed foods are easier to digest.",
+  "Have dinner early — by 7 or 8 PM.",
+  "Don’t skip breakfast — it fuels your day.",
+  "Vitamin D from morning sunlight is a must.",
+  "Chew your food slowly to aid digestion.",
+  "Soak almonds overnight for better digestion.",
+  "Avoid oily snacks, opt for roasted options.",
+  "Replace tea with herbal teas like tulsi or chamomile.",
+  "Have one seasonal fruit daily.",
+  "Use mustard or olive oil in cooking — they’re heart-friendly.",
+  "Limit fried snacks — try baked or air-fried versions.",
+  "Drink a glass of warm water after meals.",
+  "Include curd or buttermilk to improve gut health.",
+  "Practice portion control, not food restrictions.",
+];
+
+let tipIndex = 0;
+const tipBox = document.getElementById("nutritionTip");
+function rotateTips() {
+  tipBox.innerText = tips[tipIndex];
+  tipIndex = (tipIndex + 1) % tips.length;
+}
+setInterval(rotateTips, 5000);
+rotateTips();
+function speakTip() {
+  const utterance = new SpeechSynthesisUtterance(tipBox.innerText);
+  speechSynthesis.speak(utterance);
+}
+const mealPlans = {
+  "50-59": {
+    "Diabetes": [
+      ["Oats with banana", "Vegetable salad", "Chapati with tofu curry", "Moong dal soup"],
+      ["Poha", "Fruit bowl", "Brown rice & dal", "Steamed veggies"],
+      ["Upma", "Sprouts", "Roti with mixed veg", "Ragi malt"],
+      ["Idli", "Fruit", "Veg khichdi", "Milk"],
+      ["Broken wheat upma", "Cucumber slices", "Rajma rice", "Veg soup"],
+      ["Vegetable paratha", "Papaya", "Millets with dal", "Buttermilk"],
+      ["Ragi dosa", "Boiled egg", "Jeera rice", "Herbal tea"]
+    ],
+    "BP": [
+      ["Multigrain toast", "Apple", "Vegetable pulao", "Coconut water"],
+      ["Cornflakes with milk", "Cucumber salad", "Brown rice with dal", "Spinach soup"],
+      ["Dalia", "Mixed fruits", "Lentil soup with roti", "Banana"],
+      ["Oats idli", "Carrot sticks", "Millet khichdi", "Coconut water"],
+      ["Vegetable poha", "Boiled egg", "Roti with paneer curry", "Green tea"],
+      ["Upma", "Apple slices", "Lauki sabzi", "Low-fat yogurt"],
+      ["Moong dal chilla", "Watermelon", "Vegetable rice", "Herbal tea"]
+    ],
+    "Calcium": [
+      ["Ragi malt", "Boiled eggs", "Chapati with palak paneer", "Buttermilk"],
+      ["Milk with nuts", "Banana", "Rajma curry with rice", "Cheese slices"],
+      ["Oats porridge", "Tofu salad", "Jeera rice with spinach curry", "Almond milk"],
+      ["Vegetable paratha", "Lassi", "Soybean pulao", "Curd rice"],
+      ["Ragi dosa", "Papaya", "Chickpea curry", "Milkshake"],
+      ["Multigrain sandwich", "Orange", "Paneer bhurji", "Low-fat milk"],
+      ["Cornflakes with milk", "Boiled chana", "Palak rice", "Fruit yogurt"]
+    ],
+    "Heart":[
+      ["Oats porridge", "Boiled egg", "Chapati with spinach", "Green tea"],
+["Vegetable poha", "Papaya", "Brown rice with dal", "Coconut water"],
+["Multigrain toast", "Mixed nuts", "Roti with lauki", "Low-fat milk"],
+["Idli with chutney", "Apple", "Vegetable pulao", "Buttermilk"],
+["Ragi dosa", "Banana", "Chickpea curry", "Fruit yogurt"],
+["Upma", "Cucumber slices", "Rajma rice", "Herbal drink"],
+["Cornflakes with soy milk", "Orange", "Vegetable curry", "Green tea"]
+
+    ],
+    "Arthritis":[
+      ["Ragi malt", "Boiled sprouts", "Roti with palak paneer", "Buttermilk"],
+["Oats with nuts", "Banana", "Brown rice with dal", "Ginger tea"],
+["Multigrain sandwich", "Orange", "Moong dal soup", "Curd rice"],
+["Vegetable paratha", "Papaya", "Jeera rice with sabzi", "Milk"],
+["Dalia", "Boiled egg", "Millets and dal", "Turmeric milk"],
+["Ragi dosa", "Fruit bowl", "Khichdi", "Buttermilk"],
+["Cornflakes", "Cucumber", "Spinach curry", "Herbal tea"]
+
+    ],
+    "Digestion":[
+      ["Moong dal khichdi", "Banana", "Curd rice", "Herbal tea"],
+["Oats idli", "Papaya", "Chapati with sabzi", "Mint water"],
+["Dalia", "Apple", "Vegetable rice", "Buttermilk"],
+["Ragi porridge", "Boiled potato", "Plain khichdi", "Ajwain water"],
+["Upma", "Fruit salad", "Jeera rice", "Lassi"],
+["Cornflakes", "Guava", "Spinach soup", "Coconut water"],
+["Multigrain toast", "Boiled egg", "Lentil soup", "Curd"]
+
+    ],
+    "Immunity":[
+      ["Turmeric milk", "Boiled egg", "Chapati with veg curry", "Amla juice"],
+["Oats porridge", "Mixed fruits", "Lentil curry with rice", "Ginger tea"],
+["Ragi dosa", "Banana", "Moong dal", "Buttermilk"],
+["Vegetable poha", "Papaya", "Rajma curry", "Tulsi tea"],
+["Upma", "Apple", "Roti with palak paneer", "Mint drink"],
+["Dalia", "Orange", "Khichdi", "Herbal water"],
+["Idli", "Boiled peanuts", "Vegetable pulao", "Curd"]
+
+    ],
+    "Weight":[
+      ["Oats porridge", "Apple", "Brown rice with dal", "Green tea"],
+["Ragi malt", "Cucumber sticks", "Roti with sabzi", "Mint water"],
+["Upma", "Papaya", "Khichdi", "Buttermilk"],
+["Vegetable sandwich", "Fruit salad", "Jeera rice with curry", "Lassi"],
+["Cornflakes with almond milk", "Banana", "Moong dal soup", "Ginger tea"],
+["Dalia", "Orange", "Spinach khichdi", "Herbal tea"],
+["Multigrain toast", "Boiled egg", "Vegetable rice", "Buttermilk"]
+
+    ]
+  },
+  "60-69": {
+    "Diabetes": [
+      ["Ragi dosa", "Cucumber", "Tofu curry with brown rice", "Buttermilk"],
+      ["Oats porridge", "Fruit salad", "Millet roti with dal", "Moong soup"],
+      ["Dalia", "Apple", "Chapati with bhindi", "Ragi malt"],
+      ["Upma", "Boiled sprouts", "Mixed veg khichdi", "Milk"],
+      ["Vegetable poha", "Papaya", "Wheat pasta with veggies", "Fruit salad"],
+      ["Ragi idli", "Tomato slices", "Vegetable dalia", "Coconut water"],
+      ["Besan chilla", "Orange", "Jeera rice with spinach", "Green tea"]
+    ],
+    "BP": [
+      ["Brown bread toast", "Banana", "Vegetable pulao", "Herbal tea"],
+      ["Upma", "Boiled egg", "Roti with lauki curry", "Buttermilk"],
+      ["Dalia", "Fruit", "Spinach khichdi", "Low-sodium soup"],
+      ["Idli", "Mixed nuts", "Rice with dal", "Cucumber juice"],
+      ["Oats", "Papaya", "Vegetable curry", "Coconut water"],
+      ["Vegetable sandwich", "Carrot sticks", "Chapati with bottle gourd", "Green tea"],
+      ["Besan chilla", "Guava", "Moong dal khichdi", "Fruit yogurt"]
+    ],
+    "Calcium": [
+      ["Ragi porridge", "Boiled peanuts", "Rajma with rice", "Lassi"],
+      ["Milk with soaked almonds", "Banana", "Palak paneer", "Low-fat curd"],
+      ["Tofu sandwich", "Papaya", "Paneer rice", "Buttermilk"],
+      ["Vegetable poha", "Fruit mix", "Soybean sabzi", "Milk"],
+      ["Multigrain toast", "Apple", "Chickpea curry", "Curd rice"],
+      ["Cornflakes with milk", "Dates", "Dalia with vegetables", "Yogurt"],
+      ["Ragi dosa", "Fruit slices", "Spinach khichdi", "Almond milk"]
+    ],
+    "Heart": [
+  ["Oats porridge", "Boiled egg", "Brown rice with palak dal", "Buttermilk"],
+  ["Ragi dosa", "Tomato slices", "Tofu curry with chapati", "Coconut water"],
+  ["Vegetable poha", "Apple", "Millet khichdi", "Herbal tea"],
+  ["Moong dal chilla", "Papaya", "Rajma with rice", "Green tea"],
+  ["Dalia", "Cucumber salad", "Veg pulao", "Lassi"],
+  ["Multigrain toast", "Orange", "Lauki sabzi with chapati", "Low-fat curd"],
+  ["Upma", "Boiled sprouts", "Vegetable soup with toast", "Fruit bowl"]
+],
+"Arthritis": [
+  ["Ragi malt", "Banana", "Tofu sabzi with chapati", "Turmeric milk"],
+  ["Vegetable upma", "Papaya", "Palak paneer with rice", "Buttermilk"],
+  ["Dalia with flax seeds", "Apple", "Chickpea curry with roti", "Ginger tea"],
+  ["Oats idli", "Tomato slices", "Lauki curry with millet", "Fruit yogurt"],
+  ["Ragi dosa", "Almonds", "Lentil soup with multigrain bread", "Herbal drink"],
+  ["Vegetable khichdi", "Dates", "Spinach dal with brown rice", "Milk"],
+  ["Moong dal chilla", "Fruit salad", "Mixed veg curry with roti", "Curd"]
+],
+"Digestion": [
+  ["Soft idli", "Coconut chutney", "Vegetable dalia", "Herbal tea"],
+  ["Banana oats", "Cucumber", "Palak khichdi", "Buttermilk"],
+  ["Dalia with raisins", "Apple", "Moong soup with rice", "Peppermint tea"],
+  ["Rice porridge", "Boiled veggies", "Soft chapati with lauki sabzi", "Curd"],
+  ["Ragi porridge", "Banana", "Lentil khichdi", "Warm water"],
+  ["Vegetable poha", "Papaya", "Curd rice", "Fennel tea"],
+  ["Toast with jam", "Carrot soup", "Steamed veg platter", "Fruit bowl"]
+],
+"Immunity": [
+  ["Ragi porridge", "Orange", "Vegetable rice with dal", "Ginger lemon tea"],
+  ["Boiled egg", "Dates", "Moong dal curry with roti", "Milk"],
+  ["Vegetable sandwich", "Guava", "Chickpea rice", "Herbal tea"],
+  ["Oats chilla", "Papaya", "Mixed veg pulao", "Buttermilk"],
+  ["Curd oats", "Almonds", "Rajma curry with rice", "Soup"],
+  ["Ragi dosa", "Carrot sticks", "Vegetable upma", "Fruit juice"],
+  ["Milk with turmeric", "Fruit bowl", "Palak dal with rice", "Curd"]
+],
+"Weight": [
+  ["Oats porridge", "Boiled egg", "Mixed veg curry with brown rice", "Green tea"],
+  ["Moong dal chilla", "Tomato slices", "Palak soup with roti", "Herbal drink"],
+  ["Ragi malt", "Banana", "Vegetable khichdi", "Buttermilk"],
+  ["Poha", "Apple", "Tofu sabzi with chapati", "Lemon water"],
+  ["Upma with veggies", "Orange", "Dalia with moong dal", "Yogurt"],
+  ["Soft idli", "Coconut chutney", "Chickpea curry with roti", "Soup"],
+  ["Vegetable sandwich", "Fruit bowl", "Rice with rajma", "Milk"]
+]
+
+  },
+  "70-79": {
+    "Diabetes": [
+      ["Ragi idli", "Fruit bowl", "Vegetable rice", "Coconut water"],
+      ["Upma", "Sprouts", "Lentil soup", "Ragi malt"],
+      ["Dalia", "Apple", "Roti with palak curry", "Milk"],
+      ["Cornflakes", "Papaya", "Vegetable khichdi", "Buttermilk"],
+      ["Vegetable poha", "Boiled eggs", "Tofu curry", "Green tea"],
+      ["Oats porridge", "Dates", "Millet dal rice", "Herbal drink"],
+      ["Multigrain sandwich", "Carrot sticks", "Jeera rice", "Soup"]
+    ],
+    "BP": [
+      ["Wheat toast", "Apple", "Rice with moong dal", "Herbal tea"],
+      ["Vegetable oats", "Cucumber", "Chapati with bhindi", "Green tea"],
+      ["Dalia", "Papaya", "Spinach dal", "Coconut water"],
+      ["Idli", "Banana", "Vegetable rice", "Yogurt"],
+      ["Cornflakes", "Mixed nuts", "Palak rice", "Buttermilk"],
+      ["Multigrain sandwich", "Orange", "Chickpea salad", "Lassi"],
+      ["Besan chilla", "Fruit salad", "Roti with lauki", "Curd"]
+    ],
+    "Calcium": [
+      ["Ragi dosa", "Dates", "Paneer rice", "Buttermilk"],
+      ["Tofu paratha", "Banana", "Rajma with rice", "Curd"],
+      ["Milk with almonds", "Papaya", "Palak sabzi", "Soy milk"],
+      ["Vegetable poha", "Orange", "Chickpea curry", "Lassi"],
+      ["Ragi idli", "Boiled egg", "Soybean rice", "Milk"],
+      ["Cornflakes", "Fruit", "Dal khichdi", "Yogurt"],
+      ["Oats upma", "Carrot sticks", "Mixed veg rice", "Coconut milk"]
+    ],
+    "Heart": [
+  ["Ragi dosa", "Tomato slices", "Palak dal with brown rice", "Buttermilk"],
+  ["Oats porridge", "Papaya", "Lauki curry with roti", "Green tea"],
+  ["Vegetable upma", "Apple", "Tofu curry with millets", "Coconut water"],
+  ["Moong dal soup", "Dates", "Chickpea rice", "Herbal tea"],
+  ["Dalia with veggies", "Banana", "Vegetable pulao", "Fruit yogurt"],
+  ["Multigrain toast", "Orange", "Rajma with rice", "Low-fat milk"],
+  ["Vegetable khichdi", "Cucumber sticks", "Spinach dal with chapati", "Curd"]
+],
+"Arthritis": [
+  ["Soft idli", "Turmeric chutney", "Tofu sabzi with roti", "Warm milk"],
+  ["Dalia with flax seeds", "Apple", "Palak paneer with brown rice", "Ginger tea"],
+  ["Ragi porridge", "Banana", "Vegetable stew with toast", "Curd"],
+  ["Vegetable poha", "Papaya", "Chickpea curry with millet", "Herbal water"],
+  ["Upma with veggies", "Tomato slices", "Lentil soup with roti", "Fruit bowl"],
+  ["Cornflakes with milk", "Orange", "Mixed veg curry with jeera rice", "Buttermilk"],
+  ["Besan chilla", "Dates", "Rajma curry with roti", "Lassi"]
+],
+"Digestion": [
+  ["Curd rice", "Papaya", "Vegetable soup with toast", "Peppermint tea"],
+  ["Oats porridge", "Cucumber", "Moong dal khichdi", "Buttermilk"],
+  ["Dalia with raisins", "Banana", "Chapati with spinach curry", "Fruit yogurt"],
+  ["Rice porridge", "Apple", "Steamed veggies", "Fennel tea"],
+  ["Vegetable poha", "Tomato slices", "Palak dal with brown rice", "Curd"],
+  ["Ragi idli", "Boiled veggies", "Soft sabzi with roti", "Warm water"],
+  ["Soft upma", "Fruit salad", "Mixed veg khichdi", "Soup"]
+],
+"Immunity": [
+  ["Milk with turmeric", "Orange", "Palak dal with rice", "Ginger lemon tea"],
+  ["Boiled egg", "Papaya", "Vegetable pulao", "Fruit yogurt"],
+  ["Ragi dosa", "Apple", "Tofu curry with millets", "Herbal tea"],
+  ["Vegetable sandwich", "Dates", "Chickpea curry with chapati", "Coconut water"],
+  ["Upma with veggies", "Guava", "Rajma rice", "Curd"],
+  ["Soft idli", "Cucumber", "Moong dal soup", "Milk"],
+  ["Dalia", "Fruit mix", "Spinach curry with brown rice", "Green tea"]
+],
+"Weight": [
+  ["Oats chilla", "Papaya", "Palak soup with multigrain toast", "Herbal tea"],
+  ["Vegetable poha", "Banana", "Chickpea curry with roti", "Buttermilk"],
+  ["Ragi malt", "Cucumber", "Vegetable dalia", "Lemon water"],
+  ["Upma with nuts", "Apple", "Spinach khichdi", "Curd"],
+  ["Cornflakes with milk", "Dates", "Tofu sabzi with chapati", "Green tea"],
+  ["Multigrain sandwich", "Guava", "Rajma rice", "Soup"],
+  ["Soft idli", "Fruit bowl", "Dalia with veggies", "Milk"]
+]
+
+  },
+  "80+": {
+    "Diabetes": [
+      ["Oats porridge", "Banana", "Moong dal soup", "Milk"],
+      ["Dalia", "Apple", "Chapati with sabzi", "Buttermilk"],
+      ["Idli", "Papaya", "Vegetable rice", "Ragi malt"],
+      ["Vegetable poha", "Sprouts", "Tofu curry", "Herbal tea"],
+      ["Upma", "Carrot slices", "Spinach khichdi", "Milk"],
+      ["Ragi idli", "Fruit bowl", "Rice with dal", "Soup"],
+      ["Multigrain toast", "Cucumber", "Veg pulao", "Green tea"]
+    ],
+    "BP": [
+      ["Wheat porridge", "Apple", "Moong dal rice", "Coconut water"],
+      ["Cornflakes", "Papaya", "Vegetable khichdi", "Buttermilk"],
+      ["Idli", "Banana", "Spinach dal", "Milk"],
+      ["Oats", "Fruit", "Lauki sabzi", "Lassi"],
+      ["Vegetable poha", "Boiled egg", "Chapati with bhindi", "Green tea"],
+      ["Multigrain sandwich", "Carrot sticks", "Rice with dal", "Yogurt"],
+      ["Besan chilla", "Orange", "Jeera rice", "Soup"]
+    ],
+    "Calcium": [
+      ["Ragi malt", "Dates", "Palak paneer", "Milk"],
+      ["Oats porridge", "Boiled egg", "Chickpea rice", "Curd"],
+      ["Vegetable poha", "Banana", "Paneer curry", "Buttermilk"],
+      ["Cornflakes", "Fruit", "Rajma curry", "Soy milk"],
+      ["Multigrain toast", "Papaya", "Dal rice", "Lassi"],
+      ["Ragi dosa", "Orange", "Spinach khichdi", "Yogurt"],
+      ["Milk with almonds", "Cucumber", "Mixed veg curry", "Curd rice"]
+    ],
+    "Heart": [
+  ["Soft idli", "Papaya", "Spinach dal with rice", "Coconut water"],
+  ["Oats porridge", "Banana", "Lauki sabzi with roti", "Green tea"],
+  ["Vegetable khichdi", "Apple", "Chickpea curry", "Buttermilk"],
+  ["Ragi malt", "Boiled egg", "Palak paneer with brown rice", "Herbal tea"],
+  ["Upma", "Tomato slices", "Mixed veg dal", "Fruit yogurt"],
+  ["Cornflakes with milk", "Orange", "Jeera rice with moong dal", "Low-fat curd"],
+  ["Curd rice", "Cucumber", "Tofu curry with chapati", "Soup"]
+],
+"Arthritis": [
+  ["Ragi idli", "Ginger chutney", "Tofu sabzi", "Warm turmeric milk"],
+  ["Dalia with flaxseeds", "Banana", "Palak curry with roti", "Herbal tea"],
+  ["Vegetable poha", "Papaya", "Rajma rice", "Curd"],
+  ["Oats porridge", "Boiled peanuts", "Chickpea curry", "Soup"],
+  ["Upma with veggies", "Apple", "Moong dal with rice", "Buttermilk"],
+  ["Soft dosa", "Dates", "Vegetable khichdi", "Fruit yogurt"],
+  ["Ragi porridge", "Guava", "Soft paneer curry with chapati", "Lassi"]
+],
+"Digestion": [
+  ["Curd rice", "Banana", "Vegetable soup", "Fennel tea"],
+  ["Oats upma", "Papaya", "Spinach dal", "Buttermilk"],
+  ["Vegetable poha", "Boiled egg", "Soft khichdi", "Ginger tea"],
+  ["Rice porridge", "Apple", "Lauki curry", "Coconut water"],
+  ["Dalia with veggies", "Cucumber", "Moong dal with roti", "Fruit yogurt"],
+  ["Ragi malt", "Orange", "Jeera rice", "Warm water"],
+  ["Soft idli", "Tomato slices", "Chickpea curry", "Curd"]
+],
+"Immunity": [
+  ["Milk with turmeric", "Papaya", "Palak paneer", "Ginger lemon tea"],
+  ["Boiled egg", "Banana", "Vegetable rice", "Fruit yogurt"],
+  ["Vegetable upma", "Apple", "Tofu curry with chapati", "Herbal tea"],
+  ["Ragi dosa", "Guava", "Rajma rice", "Buttermilk"],
+  ["Cornflakes", "Dates", "Spinach curry", "Curd"],
+  ["Soft idli", "Cucumber", "Moong dal khichdi", "Soup"],
+  ["Multigrain toast", "Fruit mix", "Chickpea sabzi", "Green tea"]
+],
+"Weight": [
+  ["Oats chilla", "Papaya", "Vegetable stew with toast", "Lemon water"],
+  ["Dalia", "Apple", "Moong dal khichdi", "Curd"],
+  ["Vegetable poha", "Banana", "Palak dal with roti", "Green tea"],
+  ["Ragi malt", "Cucumber", "Chickpea curry", "Buttermilk"],
+  ["Soft idli", "Dates", "Vegetable rice", "Herbal tea"],
+  ["Cornflakes with milk", "Guava", "Tofu sabzi", "Soup"],
+  ["Multigrain toast", "Tomato slices", "Spinach khichdi", "Fruit yogurt"]
+]
+
+  }
+};
+
+function updateMeals() {
+  const age = document.getElementById("ageGroup").value;
+  const condition = document.getElementById("healthCondition").value;
+  const plan = mealPlans[age]?.[condition] || [];
+  const tableDiv = document.getElementById("mealPlanTable");
+  if (!plan.length) {
+    tableDiv.innerHTML = "<p>Please select age and health condition.</p>";
+    return;
+  }
+  let html = "<table><tr><th>Day</th><th>Meals</th></tr>";
+  plan.forEach((meals, i) => {
+    html += `<tr><td>Day ${i + 1}</td><td><ul>${meals.map(m => `<li>${m}</li>`).join('')}</ul></td></tr>`;
+  });
+  html += "</table>";
+  tableDiv.innerHTML = html;
+}
+document.getElementById("ageGroup").addEventListener("change", updateMeals);
+document.getElementById("healthCondition").addEventListener("change", updateMeals);
+</script>
+</body>
+</html>

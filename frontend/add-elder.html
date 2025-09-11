@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Add Elder | ElderConnect</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+      background-color: #f0f4f8;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      margin-top: 1.5rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>👵 Add Elder Profile</h2>
+
+  <form id="elderForm">
+    <label for="name">👤 Full Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="dob">🎂 Date of Birth:</label>
+    <input type="date" id="dob" required>
+
+    <label for="gender">🚻 Gender:</label>
+    <select id="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <button type="submit">➕ Add Elder</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("elderForm");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const dob = document.getElementById("dob").value;
+      const gender = document.getElementById("gender").value;
+
+      fetch("http://localhost:5000/api/elders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("adminToken")
+        },
+        body: JSON.stringify({ name, dob, gender })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.msg || "✅ Elder added!");
+        form.reset();
+      })
+      .catch(err => {
+        console.error("❌ Error:", err);
+        alert("❌ Failed to add elder");
+      });
+    });
+  </script>
+
+</body>
+</html>

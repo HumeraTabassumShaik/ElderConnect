@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Appointment Reminder | ElderConnect</title>
+  <link rel="stylesheet" href="style.css">
+ </head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1>ElderConnect</h1>
+    <nav>
+      <a href="index.html">🏠 Home</a>
+      <a href="reminders.html">💊 Medication</a>
+      <a href="appointments.html" class="active">📅 Appointments</a>
+      <a href="about.html">ℹ️ About</a>
+    </nav>
+  </header>
+
+  <!-- Appointment Form Section -->
+  <main class="form-wrapper">
+    <h2>📅 Set an Appointment Reminder</h2>
+
+    <form id="appointmentForm" class="reminder-form">
+  <label for="elderName">👵 Elder's Name</label>
+  <input type="text" id="elderName" placeholder="e.g., Laxmi Bai" required>
+
+  <label for="phone">📞 Phone Number</label>
+  <input type="tel" id="phone" placeholder="+91XXXXXXXXXX" required>
+
+  <label for="doctor">🩺 Doctor's Name</label>
+  <input type="text" id="doctor" placeholder="e.g., Dr. Mehta" required>
+
+  <label for="apptDate">📆 Appointment Date & Time</label>
+  <input type="datetime-local" id="apptDate" required>
+
+  <label for="message">📝 Reminder Message</label>
+  <textarea id="message" placeholder="e.g., Appointment with Dr. Mehta at 4 PM" required></textarea>
+
+  <label for="reminderType">Reminder Type</label>
+   
+     <select id="reminderType"> 
+                    <option value="call">📞 Call</option> 
+                    <option value="sms">💬 SMS</option> 
+                    <option value="email">📧 Email</option> 
+                  </select>
+
+  <!-- Hidden email input by default -->
+  <div id="emailField" style="display: none;">
+    <label for="email">📧 Enter Email Address</label>
+    <input type="email" id="email" placeholder="e.g., elder@example.com">
+  </div>
+
+  <p class="info-text">⏰ A Reminder will be sent <strong>24 hours & 2 hours before</strong> the appointment.</p>
+  <button type="submit" id="sendBtn">📨 Send Reminder</button>
+</form>
+
+
+    <p id="statusMsg"></p>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>❤️ ElderConnect – Health & Happiness</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+  const reminderTypeSelect = document.getElementById("reminderType");
+  const emailField = document.getElementById("emailField");
+  const sendBtn = document.getElementById("sendBtn");
+
+  reminderTypeSelect.addEventListener("change", () => {
+    const type = reminderTypeSelect.value;
+    sendBtn.innerText = type === "email" ? "📧 Send Email"
+                      : type === "sms" ? "💬 Send SMS"
+                      : "📞 Send Call";
+    emailField.style.display = type === "email" ? "block" : "none";
+  });
+
+  document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('elderName').value;
+    const phone = document.getElementById('phone').value;
+    const doctor = document.getElementById('doctor').value;
+    const dateTime = document.getElementById('apptDate').value;
+    const message = document.getElementById('message').value;
+    const reminderType = document.getElementById('reminderType').value;
+    const email = document.getElementById('email')?.value || null;
+
+    const fullMessage = `${message} with ${doctor}`;
+
+    const body = {
+      name,
+      phone,
+      email,
+      message: fullMessage,
+      type: reminderType,
+      category: "appointment",
+      dateTime
+    };
+
+    try {
+      const res = await fetch('http://localhost:5000/api/reminders/call', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+      document.getElementById('statusMsg').innerText = data.msg || "Reminder sent!";
+    } catch (err) {
+      console.error(err);
+      document.getElementById('statusMsg').innerText = "❌ Error sending reminder.";
+    }
+  });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>/* ✅ Custom Checkbox Styling */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  user-select: none;
+}
+
+/* Hide the default checkbox */
+.checkbox-container input[type="checkbox"] {
+  display: none;
+}
+
+/* Custom checkmark box */
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4CAF50;
+  border-radius: 5px;
+  display: inline-block;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* On hover */
+.checkbox-container:hover .checkbox-custom {
+  border-color: #388e3c;
+  transform: scale(1.1);
+}
+
+/* When checked */
+.checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+/* Checkmark tick */
+.checkbox-container input[type="checkbox"]:checked + .checkbox-custom::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+</style>
+</head>
+<body>
+  <label class="checkbox-container">
+  <input type="checkbox" name="agree">
+  <span class="checkbox-custom"></span>
+  I agree to the terms
+</label>
+
+<label class="checkbox-container">
+  <input type="checkbox" name="subscribe">
+  <span class="checkbox-custom"></span>
+  Subscribe to newsletter
+</label>
+
+</body>
+</html>
